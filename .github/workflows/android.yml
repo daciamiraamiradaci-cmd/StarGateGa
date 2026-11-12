@@ -1,0 +1,45 @@
+
+name: بناء تطبيق بوابة النجوم
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'StarGateAndroid_Project.zip'
+      - '.github/workflows/android.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: تنزيل ملفات المشروع
+        uses: actions/checkout@v4
+
+      - name: فك ضغط المشروع
+        run: |
+          unzip StarGateAndroid_Project.zip
+          ls -la StarGateAndroid
+
+      - name: إعداد جافا
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: إعداد Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: بناء تطبيق أندرويد
+        run: |
+          cd StarGateAndroid
+          gradle assembleDebug
+
+      - name: حفظ ملف التطبيق
+        uses: actions/upload-artifact@v4
+        with:
+          name: StarGate-APK
+          path: StarGateAndroid/app/build/outputs/apk/debug/app-debug.apk
+          
