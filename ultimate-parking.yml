@@ -1,0 +1,20 @@
+
+name: Build Ultimate 3D Parking APK
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Check Unity project
+        run: |
+          test -d Ultimate3DParking/Assets
+          test -d Ultimate3DParking/Packages
+          test -d Ultimate3DParking/ProjectSettings
+          echo "Unity project found"
+          
